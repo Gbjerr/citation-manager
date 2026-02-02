@@ -1,11 +1,11 @@
-package com.gusbjer.CitationGenerator.model;
+package com.gusbjer.CitationManager.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
+/**
+ * Entity for keeping track of registered users.
+ */
 @Entity
 @Table(name = "users")
 @Builder @Getter @Setter @NoArgsConstructor @AllArgsConstructor

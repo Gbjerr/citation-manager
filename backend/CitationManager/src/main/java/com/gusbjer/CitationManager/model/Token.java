@@ -1,10 +1,13 @@
-package com.gusbjer.CitationGenerator.model;
+package com.gusbjer.CitationManager.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+/**
+ * Token entity which links to {@link User}s for authorization.
+ */
 @Entity
 @Table(name = "tokens")
 @Builder
@@ -17,8 +20,8 @@ public class Token {
     private Long id;
 
     private String token;
-    boolean expired;
-    boolean revoked;
+    private boolean expired;
+    private boolean revoked;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

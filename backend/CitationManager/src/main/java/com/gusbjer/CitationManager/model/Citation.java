@@ -1,4 +1,4 @@
-package com.gusbjer.CitationGenerator.model;
+package com.gusbjer.CitationManager.model;
 import java.util.Date;
 
 import jakarta.persistence.Entity;

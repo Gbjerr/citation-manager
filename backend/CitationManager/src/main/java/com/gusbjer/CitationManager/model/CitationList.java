@@ -1,11 +1,11 @@
-package com.gusbjer.CitationGenerator.model;
+package com.gusbjer.CitationManager.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
+/**
+ * Citation List entity where each list links to a {@link User}.
+ */
 @Entity
 @Table(name = "citation_lists")
 @Builder @Getter @Setter @NoArgsConstructor @AllArgsConstructor
