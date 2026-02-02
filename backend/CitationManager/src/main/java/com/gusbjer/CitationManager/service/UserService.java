@@ -2,11 +2,15 @@ package com.gusbjer.CitationManager.service;
 
 import static com.gusbjer.CitationManager.security.SecurityConfig.getEncoder;
 
+import com.gusbjer.CitationManager.dto.AuthTokenWrapperDto;
 import com.gusbjer.CitationManager.dto.UserDto;
 import com.gusbjer.CitationManager.model.User;
 import com.gusbjer.CitationManager.repository.UserRepository;
 import com.gusbjer.CitationManager.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,12 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTService jwtService;
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -70,6 +80,16 @@ public class UserService {
         }
         userRepository.deleteById(id);
         return userOpt.get();
+    }
+
+    public AuthTokenWrapperDto verifyUser(User user) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        if(authentication.isAuthenticated()) {
+            return jwtService.generateAuthToken(user.getUsername());
+        }
+
+        return null;
     }
 
     public User getUserByUsername(String username) {

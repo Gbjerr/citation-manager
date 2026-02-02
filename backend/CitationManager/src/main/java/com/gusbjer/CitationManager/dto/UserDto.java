@@ -3,6 +3,9 @@ package com.gusbjer.CitationManager.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO for registered users.
+ */
 @Getter
 @Setter
 public class UserDto {
