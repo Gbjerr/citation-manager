@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import type { LoginProps } from '../../types/types.ts'
 import './Login.css';
-
-interface TokenPair {
-    accessToken: string;
-    refreshToken: string;
-}
-
-interface LoginProps {
-    setTokenPair: (pair: TokenPair) => void;
-}
 
 async function loginUser(credentials: { username: string; password: string; }) {
     return fetch('http://localhost:8090/api/auth/login', {
@@ -52,10 +43,6 @@ const Login = ( { setTokenPair }: LoginProps ) => {
             </form>
         </div>
     );
-}
-
-Login.propTypes = {
-    setTokenPair: PropTypes.func.isRequired
 }
 
 export default Login;

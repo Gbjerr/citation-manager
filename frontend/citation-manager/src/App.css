@@ -4,3 +4,17 @@
   padding: 2rem;
   text-align: center;
 }
+
+.logoutBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 0.75rem;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+}
+
+.logoutBtn:hover {
+    opacity: 0.85;
+}

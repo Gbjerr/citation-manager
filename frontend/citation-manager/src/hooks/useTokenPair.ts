@@ -1,21 +1,21 @@
 import { useState, useCallback, useEffect } from "react";
-
+import type { TokenPair } from '../types/types.ts'
 const ACCESS_KEY = "accessToken";
 const REFRESH_KEY = "refreshToken";
 
 /**
- * Defines hook for managin access and refresh tokens.
+ * Defines hook for managing access and refresh tokens.
  */
 export default function useTokenPair() {
-    const [tokenPair, setTokenPairState] = useState({
-        accessToken: localStorage.getItem(ACCESS_KEY),
-        refreshToken: localStorage.getItem(REFRESH_KEY)
+    const [tokenPair, setTokenPairState] = useState<TokenPair>({
+        accessToken: localStorage.getItem(ACCESS_KEY) ?? "",
+        refreshToken: localStorage.getItem(REFRESH_KEY) ?? ""
     })
     const [loading, setLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     // Store the token pair in local storage and state.
-    const persist = useCallback((pair: { accessToken: string; refreshToken: string; }) => {
+    const persist = useCallback((pair: TokenPair) => {
         if(pair?.accessToken !== "") localStorage.setItem(ACCESS_KEY, pair.accessToken);
         else localStorage.removeItem(ACCESS_KEY);
         if(pair?.refreshToken !== "") localStorage.setItem(REFRESH_KEY, pair.refreshToken);
@@ -29,6 +29,7 @@ export default function useTokenPair() {
     // Clears tokens from local storage.
     const clear = useCallback(() => {
         persist({ accessToken: "", refreshToken: "" });
+        setIsAuthenticated(false);
     }, [persist]);
 
     // Try rotating the refresh token.
@@ -49,12 +50,11 @@ export default function useTokenPair() {
             return null;
         }
     }, [persist, clear]);
-
     
     useEffect(() => {
         (async () => {
             const accessToken = localStorage.getItem(ACCESS_KEY);
-            const refreshToken = localStorage.getItem(REFRESH_KEY);
+            const refreshToken = localStorage.getItem(REFRESH_KEY) ?? "";
 
             if (accessToken) {
                 setTokenPairState({ accessToken, refreshToken });
@@ -74,9 +74,9 @@ export default function useTokenPair() {
         })();
     }, [tryRefreshToken, clear]);
 
-    const setTokenPair = useCallback((pair: { accessToken: string; refreshToken: string }) => {
+    const setTokenPair = useCallback((pair: TokenPair) => {
         persist(pair);
-        setIsAuthenticated(Boolean(pair?.accessToken));
+        setIsAuthenticated(pair?.accessToken !== "");
     }, [persist]);
 
   return { tokenPair, setTokenPair, isAuthenticated, loading, clear };
