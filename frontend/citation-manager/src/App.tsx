@@ -1,5 +1,6 @@
 import useTokenPair from './hooks/useTokenPair'
 import Login from './components/Login/Login';
+import CitationLists from './components/CitationLists/CitationLists';
 import type { TokenPair } from './types/types.ts'
 import './App.css'
 
@@ -35,8 +36,10 @@ const App = () => {
 
     return (
         <div className="app-wrapper">
-            <h1>Authenticated!</h1>
             <button className="logoutBtn" onClick={() => handleLogout(clear, tokenPair)}>Logout</button>
+            <div className="citation-lists-wrapper">
+                <CitationLists tokenPair={tokenPair} setTokenPair={setTokenPair} clear={clear} />
+            </div>
         </div>
     );
 };

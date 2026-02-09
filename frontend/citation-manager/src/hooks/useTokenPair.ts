@@ -37,8 +37,10 @@ export default function useTokenPair() {
         try {
             const res = await fetch("http://localhost:8090/api/auth/refresh", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ refreshToken }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${refreshToken}`
+                }
             });
             if (!res.ok) throw new Error("refresh failed");
             const data = await res.json();
