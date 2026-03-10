@@ -9,6 +9,21 @@ export interface LoginProps {
 }
 
 export interface CitationList {
-    id: number
+    id: number,
     title: string
+}
+
+export interface Citation {
+    title: string,
+    authors: string,
+    publisher: string,
+    date: string,
+    doi: string,
+    url: string,
+    isbn: string
+}
+
+export interface CitationListSelectionProps {
+    selectedCitationList: CitationList;
+    setSelectedCitationList: (list: CitationList) => void;
 }

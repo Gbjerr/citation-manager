@@ -1,0 +1,14 @@
+.citationListBtn {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.citationListNameInput {
+    padding: 5% 10%;
+    border: rgba(100, 85, 85, 0.8)
+}
+
+.listOfLists > li {
+    justify-content: left;
+    margin:5px 0;
+}

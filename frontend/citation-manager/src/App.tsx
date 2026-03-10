@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import useTokenPair from './hooks/useTokenPair'
 import Login from './components/Login/Login';
 import CitationLists from './components/CitationLists/CitationLists';
-import type { TokenPair } from './types/types.ts'
+import type { CitationList, TokenPair } from './types/types.ts'
 import './App.css'
+import { CitationsEditor } from './components/CitationsEditor/CitationsEditor.tsx';
+
 
 const App = () => {
-    const { tokenPair, setTokenPair, isAuthenticated, loading, clear } = useTokenPair();
+    const { tokenPair, setTokenPair, isAuthenticated, clear } = useTokenPair();
+    const [selectedCitationList, setSelectedCitationList] = useState<CitationList | null>(null);
 
     const handleLogout = async (clear: () => void, tokenPair: TokenPair) => {
         try {
@@ -37,9 +41,21 @@ const App = () => {
     return (
         <div className="app-wrapper">
             <button className="logoutBtn" onClick={() => handleLogout(clear, tokenPair)}>Logout</button>
-            <div className="citation-lists-wrapper">
-                <CitationLists tokenPair={tokenPair} setTokenPair={setTokenPair} clear={clear} />
-            </div>
+            <aside className="citation-lists-wrapper">
+                <CitationLists tokenPair={tokenPair} setTokenPair={setTokenPair} clear={clear} setSelectedCitationList={setSelectedCitationList} />
+            </aside>
+            <main className='main-content'>
+                {
+                    selectedCitationList == null
+                      ? <h2>No citations.</h2>
+                      : <CitationsEditor 
+                          tokenPair={tokenPair} 
+                          setTokenPair={setTokenPair} 
+                          clear={clear} 
+                          selectedCitationList={selectedCitationList} 
+                        />
+                }
+            </main>
         </div>
     );
 };

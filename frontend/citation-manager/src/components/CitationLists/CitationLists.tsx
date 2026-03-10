@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import type { TokenPair, LoginProps, CitationList } from '../../types/types.ts'
 import authorizedFetch from '../../utils/authorizedFetch.ts';
+import './CitationLists.css';
 
 interface CitationListsProps {
     tokenPair: TokenPair,
     setTokenPair: LoginProps['setTokenPair'],
     clear: LoginProps['clear']
+    setSelectedCitationList: (list: CitationList) => void;
 }
 
-const CitationLists = ({ tokenPair, setTokenPair, clear }: CitationListsProps) => {
+/**
+ * Section for displaying the citation lists of a user.
+ */
+const CitationLists = ({ tokenPair, setTokenPair, clear, setSelectedCitationList }: CitationListsProps) => {
     const [citationLists, setCitationLists] = useState<CitationList[]>([]);
+    const [newCitationListName, setNewCitationListName] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -29,7 +35,7 @@ const CitationLists = ({ tokenPair, setTokenPair, clear }: CitationListsProps) =
                 setCitationLists(data);
 
             } catch (e) {
-                setError(e instanceof Error ? e.message : "An error occurred.");
+                setError(e instanceof Error ? e.message : "An error occurred, please reload the page.");
                 console.error(e);
             }
         };
@@ -38,12 +44,15 @@ const CitationLists = ({ tokenPair, setTokenPair, clear }: CitationListsProps) =
     }, [tokenPair, setTokenPair, clear]);
 
     const doAddList = async () => {
+        if(newCitationListName.trim() === '') {
+            return;
+        }
 
         const request = await authorizedFetch(tokenPair,
             'http://localhost:8090/api/citationlists/me',
             'POST',
             { setTokenPair, clear },
-            {'title': `new list ${citationLists.length + 1}`}
+            {'title': newCitationListName}
         );
 
         if(!request?.ok) {
@@ -54,6 +63,7 @@ const CitationLists = ({ tokenPair, setTokenPair, clear }: CitationListsProps) =
 
         const data = await request.json();
         setCitationLists(prev => [...prev, data]);
+        setNewCitationListName('');
     }
 
     if(error) {
@@ -63,14 +73,15 @@ const CitationLists = ({ tokenPair, setTokenPair, clear }: CitationListsProps) =
     return <>
         <div>
             <h2>Your citation lists</h2>
-            <button onClick={doAddList}>Add new list</button>
+            <input id='citationListNameInput' className='citationListNameInput' type="text" placeholder='Enter new citation list here' onChange={(e) => setNewCitationListName(e.target.value)} />
+            <button onClick={doAddList}>+</button>
             {citationLists.length === 0 ? (
                 <p>No citation lists found</p>
             ) : (
-                <ul>
+                <ul className='listOfLists'>
                     {citationLists.map((list) => (
                         <li key={list.id}>
-                            {list.title}
+                            <button className='citationListBtn' onClick={(e) => setSelectedCitationList({id: list.id, title: list.title})}>{list.title}</button>
                         </li>
                     ))}
                 </ul>
