@@ -33,7 +33,7 @@ public class CitationController {
         return ResponseEntity.status(HttpStatus.OK).body(citation);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Citation>> getAllCitations() {
         List<Citation> citations = citationService.getAllCitations();
         if(citations == null) {
@@ -42,7 +42,7 @@ public class CitationController {
         return ResponseEntity.status(HttpStatus.OK).body(citations);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Citation> createCitation(@RequestBody CitationDto citationDto) {
         CitationList citationList = citationListService.getCitationListById(citationDto.getCitationListId());
@@ -64,7 +64,7 @@ public class CitationController {
     @GetMapping("/by-citationlist/{citationListId}")
     public ResponseEntity<List<Citation>> getCitationsByCitationListId(@PathVariable Long citationListId) {
         List<Citation> citations = citationService.getCitationsByCitationListId(citationListId);
-        if (citations == null || citations.isEmpty()) {
+        if (citations == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(citations);
