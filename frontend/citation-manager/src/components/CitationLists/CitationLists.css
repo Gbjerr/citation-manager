@@ -1,11 +1,26 @@
 .citationListBtn {
     padding-left: 20%;
     padding-right: 20%;
+    width: 100%;
+    border: 1px solid rgba(100, 85, 85, 0.8);
+    box-sizing: border-box;
+}
+
+.citationListBtn--selected {
+    border-width: 3px;
+}
+
+.citationListsHeader {
+    margin-top: 0;
 }
 
 .citationListNameInput {
     padding: 5% 10%;
     border: rgba(100, 85, 85, 0.8)
+}
+
+.listOfLists {
+    padding-left: 0;
 }
 
 .listOfLists > li {

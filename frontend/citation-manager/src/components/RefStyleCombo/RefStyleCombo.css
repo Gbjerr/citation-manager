@@ -1,0 +1,103 @@
+.refStyleCombo {
+    position: relative;
+    width: 100px;
+}
+
+.refStyleComboInput {
+    width: 100%;
+    padding: 8px 34px 8px 10px;
+    border: 1px solid rgba(100, 85, 85, 0.5);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.refStyleComboInput:focus {
+    outline: none;
+    border-color: rgba(60, 120, 200, 0.9);
+    box-shadow: 0 0 0 3px rgba(60, 120, 200, 0.25);
+}
+
+.comboTitle {
+    font-size: 13px;
+}
+
+.refStyleComboButton {
+    position: absolute;
+    right: -40px;
+    top: 70%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+.refStyleComboButton:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.refStyleComboButton:focus {
+    outline: none;
+}
+
+.refStyleComboButton:focus-visible {
+    box-shadow: 0 0 0 3px rgba(60, 120, 200, 0.25);
+}
+
+.downIcon {
+    width: 18px;
+    height: 18px;
+}
+
+.refStyleComboOptions {
+    margin-top: 6px;
+    padding: 6px;
+    border: 1px solid rgba(100, 85, 85, 0.35);
+    border-radius: 8px;
+    background: #fff;
+    max-height: 220px;
+    overflow: auto;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    z-index: 50;
+}
+
+.refStyleComboOption {
+    padding: 8px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Headless UI adds data-* states */
+.refStyleComboOption[data-focus] {
+    background: rgba(60, 120, 200, 0.12);
+}
+
+.refStyleComboOption[data-selected] {
+    background: rgba(60, 120, 200, 0.18);
+}
+
+.refStyleComboOptionText {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.refStyleComboOptionText--selected {
+    font-weight: 600;
+}
+
+.refStyleComboEmpty {
+    padding: 8px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 13px;
+}

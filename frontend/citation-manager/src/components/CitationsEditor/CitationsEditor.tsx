@@ -1,55 +1,82 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import type { Citation, CitationList, TokenPair } from "../../types/types";
-import authorizedFetch from "../../utils/authorizedFetch";
-import { CitationDialog } from "../CitationDialog/CitationDialog";
+import { useCallback, useEffect, useState } from 'react';
+import type {
+    Citation,
+    CitationList,
+    ReferenceStyleType,
+    TokenPair,
+} from '../../types/types';
+import authorizedFetch from '../../utils/authorizedFetch';
+import { CitationDialog } from '../CitationDialog/CitationDialog';
+import { CiteEntry } from '../CiteEntry/CiteEntry';
+import { formatCitations } from '../../utils/formatCitations';
+import './CitationsEditor.css';
+import { RefStyleCombo } from '../RefStyleCombo/RefStyleCombo';
 
 const EMPTY_CITATION: Citation = {
-  title: '',
-  authors: '',
-  publisher: '',
-  date: '', // "YYYY-MM-DD"
-  doi: '',
-  url: '',
-  isbn: ''
+    title: '',
+    authors: '',
+    publisher: '',
+    date: new Date(), // "YYYY-MM-DD"
+    doi: '',
+    url: '',
+    isbn: '',
 };
 
 type CitationEditorProps = {
-    tokenPair: TokenPair,
-    setTokenPair: (pair: TokenPair) => void,
-    clear: () => void,
-    selectedCitationList: CitationList
-}
+    tokenPair: TokenPair;
+    setTokenPair: (pair: TokenPair) => void;
+    clear: () => void;
+    selectedCitationList: CitationList;
+};
 
 /**
  * Editor for displaying and adding citations to a citation list.
  */
-export const CitationsEditor = ({ tokenPair, setTokenPair, clear, selectedCitationList }: CitationEditorProps) => {
+export const CitationsEditor = ({
+    tokenPair,
+    setTokenPair,
+    clear,
+    selectedCitationList,
+}: CitationEditorProps) => {
     const [citations, setCitations] = useState<Citation[]>([]);
+    const [bibliography, setBibliography] = useState('');
+    const [bibliographyEntries, setBibliographyEntries] = useState<string[]>(
+        [],
+    );
+    const [selectedRefStyle, setSelectedRefStyle] =
+        useState<ReferenceStyleType>('ieee');
 
-    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
     const [newCitation, setNewCitation] = useState<Citation>({
         title: '',
         authors: '',
         publisher: '',
-        date: '', // "YYYY-MM-DD"
+        date: new Date(), // "YYYY-MM-DD"
         doi: '',
         url: '',
-        isbn: ''
+        isbn: '',
     });
 
-    const openDialog = useCallback(() => {
-        setDialogOpen(true);
+    const openCreateDialog = useCallback(() => {
+        setCreateDialogOpen(true);
     }, []);
 
-    const closeDialog = useCallback(() => {
+    const closeCreateDialog = useCallback(() => {
         setNewCitation(EMPTY_CITATION);
-        setDialogOpen(false);
+        setCreateDialogOpen(false);
     }, []);
 
-    const doCreateCitation = async() => {
-        try {
+    const onRefStyleSelect = useCallback(
+        (refStyle: ReferenceStyleType | null) => {
+            if (refStyle !== null) {
+                setSelectedRefStyle(refStyle);
+            }
+        },
+        [],
+    );
 
-            // Adjust this URL/body if your backend expects a different endpoint or field names
+    const doCreateCitation = async () => {
+        try {
             const res = await authorizedFetch(
                 tokenPair,
                 'http://localhost:8090/api/citations',
@@ -59,89 +86,112 @@ export const CitationsEditor = ({ tokenPair, setTokenPair, clear, selectedCitati
                     title: newCitation.title,
                     authors: newCitation.authors,
                     publisher: newCitation.publisher,
-                    date: newCitation.date, // send "" or "YYYY-MM-DD" depending on backend; see note below
+                    date: newCitation.date?.toISOString(),
                     doi: newCitation.doi,
                     url: newCitation.url,
                     isbn: newCitation.isbn,
                     citationListId: String(selectedCitationList?.id),
-                }
+                },
             );
 
             if (!res?.ok) {
-                const msg = res ? `${res.status} ${res.statusText}` : 'Request failed';
+                const msg = res
+                    ? `${res.status} ${res.statusText}`
+                    : 'Request failed';
                 throw new Error(msg);
             }
 
             const created: Citation = await res.json();
             setCitations(prev => [...prev, created]);
-
         } catch (e) {
-            console.error(e, 'Error while creating citation')
+            console.error(e, 'Error while creating citation');
         }
-    }
+    };
 
     useEffect(() => {
-        if(selectedCitationList == null) {
+        if (selectedCitationList == null) {
             return;
         }
 
         const fetchCitations = async () => {
-
             try {
                 const res = await authorizedFetch(
-                    tokenPair, 
+                    tokenPair,
                     `http://localhost:8090/api/citations/by-citationlist/${selectedCitationList?.id}`,
                     'GET',
-                    {setTokenPair, clear}
+                    { setTokenPair, clear },
                 );
 
-                if(!res?.ok) {
-                    console.log(res?.status)
+                if (!res?.ok) {
+                    console.log(res?.status);
                 }
 
                 const data = await res?.json();
                 setCitations(data);
-            
-            } catch(e) {
-                console.error(e, `Error occurred when fetching citations for list with id=${selectedCitationList?.id}`)
+            } catch (e) {
+                console.error(
+                    e,
+                    `Error occurred when fetching citations for list with id=${selectedCitationList?.id}`,
+                );
             }
         };
 
         fetchCitations();
+    }, [selectedCitationList]);
 
-    }, [selectedCitationList])
+    useEffect(() => {
+        if (citations.length == 0) return;
 
+        const runFormatting = async () => {
+            const listOutputResult = await formatCitations(
+                citations,
+                selectedRefStyle,
+            ).then(result => result);
+            setBibliography(listOutputResult);
+            setBibliographyEntries(listOutputResult.split('\n'));
+        };
+        runFormatting();
+    }, [citations, selectedRefStyle]);
 
-  return (
-    <div className="citations-editor">
-      <button onClick={openDialog}>Add citation</button>
+    return (
+        <div className="citations-editor">
+            <div className="ce-buttonsLayout">
+                <button
+                    className="createCitationBtn"
+                    onClick={openCreateDialog}
+                >
+                    Add citation
+                </button>
+                <RefStyleCombo
+                    onRefStyleSelect={onRefStyleSelect}
+                    selectedRefStyle={selectedRefStyle}
+                />
+            </div>
 
-      <CitationDialog
-        open={isDialogOpen}
-        onClose={closeDialog}
-        selectedCitationListTitle={selectedCitationList?.title}
-        newCitation={newCitation}
-        setNewCitation={setNewCitation}
-        onSubmit={() => {
-          void doCreateCitation();
-          closeDialog();
-        }}
-      />
+            <CitationDialog
+                open={isCreateDialogOpen}
+                onClose={closeCreateDialog}
+                selectedCitationListTitle={selectedCitationList?.title}
+                newCitation={newCitation}
+                setNewCitation={setNewCitation}
+                onSubmit={() => {
+                    void doCreateCitation();
+                    closeCreateDialog();
+                }}
+            />
 
-      <ul className={"list-" + selectedCitationList.id}>
-        {citations.map((citation) => {
-          return (
-            <ul>
-              <li>{citation?.title}</li>
-              <li>{citation?.authors}</li>
-              <li>{citation?.publisher}</li>
-              <li>{citation?.date}</li>
-              <li>{citation?.doi}</li>
-              <li>{citation?.url}</li>
+            <ul className={'list-' + selectedCitationList.id}>
+                {citations.map((citation, i) => {
+                    return (
+                        <li>
+                            <CiteEntry
+                                citation={citation}
+                                text={bibliographyEntries[i]}
+                            />
+                        </li>
+                    );
+                })}
             </ul>
-          );
-        })}
-      </ul>
-    </div>
-  );
+        </div>
+    );
 };

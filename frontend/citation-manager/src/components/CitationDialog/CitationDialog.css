@@ -1,0 +1,77 @@
+/* Headless UI Dialog (no Tailwind) */
+.createDialogRoot {
+  position: relative;
+  z-index: 9999;
+}
+
+.createDialogOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.createDialogContainer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.createDialogPanel {
+  width: min(720px, 100%);
+  background: #fff;
+  color: #111;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.createDialogHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.creataeDialogTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.createDialogClose {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.createDialogBody {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.createField {
+  font-size: 14px;
+  display: block;
+}
+
+.createInput {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: inherit;
+}
+
+.createDialogActions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

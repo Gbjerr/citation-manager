@@ -1,0 +1,21 @@
+span {
+    border-radius: 5px;
+    border: 0.7px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 5px;
+}
+
+.citationText {
+    display: inline-block;
+}
+
+.editButton {
+    padding: 0.3em 0.6em;
+    font-size: 1em;
+    font-weight: 250;
+    font-family: inherit;
+    background-color: #cecdcd50;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}

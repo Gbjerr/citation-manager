@@ -1,0 +1,20 @@
+.ce-buttonsLayout {
+    display: flex;
+    gap: 5%;
+    justify-content: center;
+}
+
+.ce-buttonsLayout > button {
+    margin-left: 2px;
+    background-color: #cecdcd50;
+}
+
+.citations-editor > ul {
+    margin-left: 20px;
+    margin-right: 10%;
+}
+
+.citations-editor > ul > li {
+    text-align: left;
+    margin-top: 5px;
+}
