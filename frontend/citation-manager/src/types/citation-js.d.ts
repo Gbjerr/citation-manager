@@ -7,4 +7,8 @@ declare module '@citation-js/core' {
         static plugins: any;
         static util: any;
     }
+
+    export class plugins {
+        static config: any;
+    }
 }

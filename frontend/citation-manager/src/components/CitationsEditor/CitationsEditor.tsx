@@ -13,6 +13,7 @@ import './CitationsEditor.css';
 import { RefStyleCombo } from '../RefStyleCombo/RefStyleCombo';
 
 const EMPTY_CITATION: Citation = {
+    id: -1,
     title: '',
     authors: '',
     publisher: '',
@@ -47,15 +48,7 @@ export const CitationsEditor = ({
         useState<ReferenceStyleType>('ieee');
 
     const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
-    const [newCitation, setNewCitation] = useState<Citation>({
-        title: '',
-        authors: '',
-        publisher: '',
-        date: new Date(), // "YYYY-MM-DD"
-        doi: '',
-        url: '',
-        isbn: '',
-    });
+    const [newCitation, setNewCitation] = useState<Citation>(EMPTY_CITATION);
 
     const openCreateDialog = useCallback(() => {
         setCreateDialogOpen(true);
@@ -127,7 +120,16 @@ export const CitationsEditor = ({
                 }
 
                 const data = await res?.json();
-                setCitations(data);
+
+                const normalizeDateData = (c: Citation): Citation => {
+                    const date = c.date instanceof Date
+                        ? c.date
+                        : new Date(c.date);
+
+                    return { ...c, date: date };
+                }
+
+                setCitations(data.map(normalizeDateData));
             } catch (e) {
                 console.error(
                     e,
@@ -152,6 +154,38 @@ export const CitationsEditor = ({
         };
         runFormatting();
     }, [citations, selectedRefStyle]);
+
+    const doUpdateCitationData = async (citation: Citation) => {
+        const res = await authorizedFetch(
+            tokenPair,
+            `http://localhost:8090/api/citations/${citation.id}`,
+            'PUT',
+            { setTokenPair, clear },
+            {
+                title: citation.title,
+                authors: citation.authors,
+                publisher: citation.publisher,
+                date: citation.date.toISOString(),
+                doi: citation.doi,
+                url: citation.url,
+                isbn: citation.isbn
+            }
+        );
+
+        if (!res?.ok) {
+            console.log(res?.status);
+        }
+
+        // Replace the modified citation
+        const modifiedCitations = citations.map(c => {
+            if (citation.id == c.id) {
+                return citation;
+            }
+
+            return c;
+        })
+        setCitations(modifiedCitations);
+    };
 
     return (
         <div className="citations-editor">
@@ -187,6 +221,7 @@ export const CitationsEditor = ({
                             <CiteEntry
                                 citation={citation}
                                 text={bibliographyEntries[i]}
+                                doUpdateCitationData={doUpdateCitationData}
                             />
                         </li>
                     );

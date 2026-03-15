@@ -14,6 +14,7 @@ export interface CitationList {
 }
 
 export interface Citation {
+    id: number;
     title: string;
     authors: string;
     publisher: string;
