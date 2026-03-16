@@ -18,5 +18,6 @@ public class CitationDto {
     private String DOI;
     private String URL;
     private String ISBN;
+    private int position;
     private Long citationListId;
 }

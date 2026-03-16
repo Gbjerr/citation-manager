@@ -91,9 +91,7 @@ export const CitationDialog = memo(function CitationDialog({
                                 type="date"
                                 id="citationDateInput"
                                 className="createInput"
-                                value={
-                                    newCitation.date.toISOString().split('T')[0]
-                                }
+                                value={toDateInputValue(newCitation.date)}
                                 onChange={c =>
                                     setNewCitation({
                                         ...newCitation,
@@ -159,3 +157,10 @@ export const CitationDialog = memo(function CitationDialog({
         </Dialog>
     );
 });
+
+function toDateInputValue(date: Date | string): string {
+    if (!date) return '';
+    const d = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
+}

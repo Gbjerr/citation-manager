@@ -56,6 +56,7 @@ public class CitationController {
                 .URL(citationDto.getURL())
                 .ISBN(citationDto.getISBN())
                 .citationList(citationList)
+                .position(citationDto.getPosition())
                 .build();
         Citation createdCitation = citationService.saveCitation(citation);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCitation);
@@ -85,6 +86,7 @@ public class CitationController {
         existingCitation.setDOI(citationDto.getDOI());
         existingCitation.setURL(citationDto.getURL());
         existingCitation.setISBN(citationDto.getISBN());
+        existingCitation.setPosition(citationDto.getPosition());
         Citation updatedCitation = citationService.saveCitation(existingCitation);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCitation);
     }

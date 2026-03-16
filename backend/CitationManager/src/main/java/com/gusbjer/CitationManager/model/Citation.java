@@ -34,6 +34,7 @@ public class Citation {
     private String DOI;
     private String URL;
     private String ISBN;
+    private int position;
 
     @ManyToOne
     @JoinColumn(name = "citation_list_id", referencedColumnName = "id")

@@ -21,6 +21,7 @@ const EMPTY_CITATION: Citation = {
     doi: '',
     url: '',
     isbn: '',
+    position: -1
 };
 
 type CitationEditorProps = {
@@ -83,6 +84,9 @@ export const CitationsEditor = ({
                     doi: newCitation.doi,
                     url: newCitation.url,
                     isbn: newCitation.isbn,
+                    position: citations.length === 0
+                        ? '1'
+                        : `${citations[citations.length - 1].position + 1}`,
                     citationListId: String(selectedCitationList?.id),
                 },
             );
@@ -168,7 +172,8 @@ export const CitationsEditor = ({
                 date: citation.date.toISOString(),
                 doi: citation.doi,
                 url: citation.url,
-                isbn: citation.isbn
+                isbn: citation.isbn,
+                position: `${citation.position}`
             }
         );
 

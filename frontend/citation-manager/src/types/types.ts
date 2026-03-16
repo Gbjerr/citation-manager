@@ -22,6 +22,7 @@ export interface Citation {
     doi: string;
     url: string;
     isbn: string;
+    position: number;
 }
 
 export interface CitationListSelectionProps {
