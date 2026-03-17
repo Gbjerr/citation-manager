@@ -31,8 +31,11 @@ export const CitationDialog = memo(function CitationDialog({
                         <DialogTitle className="createDialogTitle">
                             {selectedCitationListTitle !== undefined
                                 ? `Add citation to: ${selectedCitationListTitle}`
-                                : ''}
+                                : 'Edit'}
                         </DialogTitle>
+                        <button className='submitBtn' type="button" onClick={onSubmit}>
+                            Submit
+                        </button>
                         <button
                             type="button"
                             onClick={onClose}
@@ -142,15 +145,6 @@ export const CitationDialog = memo(function CitationDialog({
                                 }
                             />
                         </label>
-
-                        <div className="createDialogActions">
-                            <button type="button" onClick={onClose}>
-                                Close
-                            </button>
-                            <button type="button" onClick={onSubmit}>
-                                Submit
-                            </button>
-                        </div>
                     </div>
                 </DialogPanel>
             </div>

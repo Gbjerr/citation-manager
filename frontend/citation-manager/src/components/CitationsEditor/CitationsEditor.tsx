@@ -201,10 +201,18 @@ export const CitationsEditor = ({
                 >
                     Add citation
                 </button>
-                <RefStyleCombo
-                    onRefStyleSelect={onRefStyleSelect}
-                    selectedRefStyle={selectedRefStyle}
-                />
+                <div className='layoutOptions'>
+                    <RefStyleCombo
+                        onRefStyleSelect={onRefStyleSelect}
+                        selectedRefStyle={selectedRefStyle}
+                    />
+                    <button
+                        className="copyBtn"
+                        onClick={() => navigator.clipboard.writeText(bibliography)}
+                    >
+                        Copy to clipboard
+                    </button>
+                </div>
             </div>
 
             <CitationDialog

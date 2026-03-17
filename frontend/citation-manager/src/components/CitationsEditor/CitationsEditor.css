@@ -1,19 +1,29 @@
 .ce-buttonsLayout {
     display: flex;
-    gap: 5%;
+    gap: 20%;
     justify-content: center;
 }
 
-.ce-buttonsLayout > button {
-    margin-left: 2px;
+.createCitationBtn {
+    height: 40px;
     background-color: #cecdcd50;
+    align-self: flex-end;
 }
 
+.copyBtn {
+    height: 40px;
+    margin-left: 50px;
+    background-color: #cecdcd50;
+    align-self: flex-end;
+}
 .citations-editor > ul {
     margin-left: 20px;
     margin-right: 10%;
 }
 
+.layoutOptions {
+    display: flex;
+}
 .citations-editor > ul > li {
     text-align: left;
     margin-top: 5px;

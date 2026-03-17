@@ -27,3 +27,7 @@
     justify-content: left;
     margin:5px 0;
 }
+
+.doAddBtn {
+    border-radius: 40%;
+}

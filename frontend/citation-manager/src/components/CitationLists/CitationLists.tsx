@@ -94,7 +94,7 @@ const CitationLists = ({
                     placeholder="Enter new citation list here"
                     onChange={e => setNewCitationListName(e.target.value)}
                 />
-                <button onClick={doAddList}>+</button>
+                <button className="doAddBtn" onClick={doAddList}>+</button>
                 {citationLists.length === 0 ? (
                     <p>No citation lists found</p>
                 ) : (
