@@ -30,18 +30,19 @@ export interface CitationListSelectionProps {
     setSelectedCitationList: (list: CitationList) => void;
 }
 
-// TODO: Supports only three styles, extend number of styles. 
+
+/**
+ * The available reference style names that should be a 1 to 1 match 
+ * to the named .csl file found in /public/styles/ e.g. 'ieee' -> /public/styles/ieee.csl
+ */
 export const REFERENCE_STYLE_VALUES = [
     'ieee',
     'apa',
     'vancouver',
-    // 'mla',
-    // 'chicago',
-    // 'ama',
-    // 'acs',
-    // 'cse',
-    // 'harvard',
-    // 'bluebook',
+    'modern-language-association',
+    'chicago-author-date-17th-edition',
+    'american-chemical-society',
+    'apa-6th-edition'
 ] as const;
 
 export type ReferenceStyleType = (typeof REFERENCE_STYLE_VALUES)[number];
