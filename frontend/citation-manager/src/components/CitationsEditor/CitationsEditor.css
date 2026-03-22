@@ -2,12 +2,14 @@
     display: flex;
     gap: 20%;
     justify-content: center;
+    padding-bottom: 10px;
 }
 
 .createCitationBtn {
     height: 40px;
+    width: 150px;
     background-color: #cecdcd50;
-    align-self: flex-end;
+    align-self: self-end;
 }
 
 .copyBtn {
@@ -23,8 +25,31 @@
 
 .layoutOptions {
     display: flex;
+    gap: 15px;
 }
+
 .citations-editor > ul > li {
     text-align: left;
     margin-top: 5px;
+}
+
+.citeEntry {
+    width: 900px;
+}
+
+@media screen and (max-width: 1110px) {
+    .ce-buttonsLayout {
+        margin-left: 60px;
+        flex-direction: column;
+    }
+
+    .createCitationBtn {
+        align-self: auto;
+    }
+}
+
+@media screen and (max-width: 1335px) {
+    .citeEntry {
+        width: auto;
+    }
 }

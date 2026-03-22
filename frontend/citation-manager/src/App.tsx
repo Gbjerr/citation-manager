@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTokenPair from './hooks/useTokenPair'
 import Login from './components/Login/Login';
 import CitationLists from './components/CitationLists/CitationLists';
@@ -10,6 +10,11 @@ import { CitationsEditor } from './components/CitationsEditor/CitationsEditor.ts
 const App = () => {
     const { tokenPair, setTokenPair, isAuthenticated, clear } = useTokenPair();
     const [selectedCitationList, setSelectedCitationList] = useState<CitationList | null>(null);
+
+    // De-select the citation list if not authenticated.
+    useEffect(() => {
+        setSelectedCitationList(null);
+    }, [isAuthenticated]);
 
     const handleLogout = async (clear: () => void, tokenPair: TokenPair) => {
         try {

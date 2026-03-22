@@ -1,7 +1,7 @@
 import { Cite, plugins } from '@citation-js/core';
 import '@citation-js/plugin-csl';
 import '@citation-js/plugin-bibtex';
-import type { Citation, ReferenceStyleType } from '../types/types';
+import { SEP, type Citation, type ReferenceStyleType } from '../types/types';
 
 type CSLDate = { 'date-parts': number[][] };
 
@@ -59,8 +59,8 @@ export async function formatCitations(
         plugins.config.get('@csl').templates.add(referenceStyle, ieeeXml);
     }
 
-    const items = citationList.map((citation, i) => ({
-        id: `item-${i + 1}`,
+    const items = citationList.map((citation) => ({
+        id: String(citation.id),
         type: 'article-journal',
         title: citation.title || '',
         author: parseAuthors(citation.authors),
@@ -78,6 +78,9 @@ export async function formatCitations(
             format: 'text',
             template: referenceStyle,
             lang: 'en-US',
+            prepend(entry: { id?: string }) {
+                return `${entry.id}${SEP} `;
+            },
         })
         .trim();
 }

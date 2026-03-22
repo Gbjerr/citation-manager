@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import type {
-    Citation,
-    CitationList,
-    ReferenceStyleType,
-    TokenPair,
+import {
+    SEP,
+    type Citation,
+    type CitationList,
+    type ReferenceStyleType,
+    type TokenPair,
 } from '../../types/types';
 import authorizedFetch from '../../utils/authorizedFetch';
 import { CitationDialog } from '../CitationDialog/CitationDialog';
@@ -42,7 +43,7 @@ export const CitationsEditor = ({
 }: CitationEditorProps) => {
     const [citations, setCitations] = useState<Citation[]>([]);
     const [bibliography, setBibliography] = useState('');
-    const [bibliographyEntries, setBibliographyEntries] = useState<string[]>(
+    const [bibliographyEntries, setBibliographyEntries] = useState<{ text: string, citation: Citation }[]>(
         [],
     );
     const [selectedRefStyle, setSelectedRefStyle] =
@@ -143,18 +144,37 @@ export const CitationsEditor = ({
         };
 
         fetchCitations();
-    }, [selectedCitationList]);
+    }, [selectedCitationList, tokenPair, setTokenPair, clear]);
 
     useEffect(() => {
-        if (citations.length == 0) return;
+        if (citations.length == 0) {
+            setBibliography('');
+            setBibliographyEntries([]);
+            return;
+        }
 
         const runFormatting = async () => {
-            const listOutputResult = await formatCitations(
-                citations,
-                selectedRefStyle,
-            ).then(result => result);
-            setBibliography(listOutputResult);
-            setBibliographyEntries(listOutputResult.split('\n'));
+            const listOutputResult = await formatCitations(citations, selectedRefStyle);
+
+            const bibEntries: { text: string; citation: Citation }[] =
+                listOutputResult.split('\n').map(entry => {
+                    const entryParts = entry.split(SEP);
+                    const entryId = entryParts[0];
+                    const text = entryParts[1].trim();
+
+                    const citation = citations.find(
+                        c => c.id === Number(entryId),
+                    );
+                    if (!citation) {
+                        throw new Error(
+                            `Failed to find citation with id=${entryId} for bibliography entry: ${entry}`,
+                        );
+                    }
+                    return { text, citation };
+                });
+
+            setBibliography(bibEntries.map(entry => entry.text).join('\n'));
+            setBibliographyEntries(bibEntries);
         };
         runFormatting();
     }, [citations, selectedRefStyle]);
@@ -228,12 +248,12 @@ export const CitationsEditor = ({
             />
 
             <ul className={'list-' + selectedCitationList.id}>
-                {citations.map((citation, i) => {
+                {bibliographyEntries.map(({ text, citation }) => {
                     return (
-                        <li>
+                        <li key={citation.id}>
                             <CiteEntry
                                 citation={citation}
-                                text={bibliographyEntries[i]}
+                                text={text}
                                 doUpdateCitationData={doUpdateCitationData}
                             />
                         </li>

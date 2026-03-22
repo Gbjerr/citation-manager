@@ -17,7 +17,7 @@ const CitationLists = ({
     tokenPair,
     setTokenPair,
     clear,
-    setSelectedCitationList,
+    setSelectedCitationList
 }: CitationListsProps) => {
     const [citationLists, setCitationLists] = useState<CitationList[]>([]);
     const [newCitationListName, setNewCitationListName] = useState<string>('');

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Citation } from '../../types/types';
 import './CiteEntry.css';
 import { CitationDialog } from '../CitationDialog/CitationDialog';
@@ -18,7 +18,7 @@ function citationEquals(a: Citation, b: Citation): boolean {
         a.doi === b.doi &&
         a.url === b.url &&
         a.isbn === b.isbn &&
-        a.date === b.date
+        a.date.getTime() === b.date.getTime()
     );
 }
 
@@ -28,6 +28,10 @@ function citationEquals(a: Citation, b: Citation): boolean {
 export const CiteEntry = ({ citation, text, doUpdateCitationData }: CiteEntryProps) => {
     const [currentCitation, setCurrentCitation] = useState(citation);
     const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
+
+    useEffect(() => {
+        setCurrentCitation(citation);
+    }, [citation]);
 
     const openUpdateDialog = useCallback(() => {
         setUpdateDialogOpen(true);

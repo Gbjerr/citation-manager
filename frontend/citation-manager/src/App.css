@@ -46,4 +46,5 @@ li {
 .main-content {
   min-width: 0;
   padding-top: 1rem;
+  margin-left: 1rem;
 }

@@ -4,6 +4,7 @@ span {
     display: flex;
     justify-content: space-between;
     padding: 5px 5px;
+    overflow: hidden;
 }
 
 .citationText {
@@ -15,6 +16,7 @@ span {
     font-size: 1em;
     font-weight: 250;
     font-family: inherit;
+    height: 40px;
     background-color: #cecdcd50;
     cursor: pointer;
     transition: border-color 0.25s;

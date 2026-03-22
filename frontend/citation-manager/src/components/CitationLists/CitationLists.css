@@ -16,7 +16,10 @@
 
 .citationListNameInput {
     padding: 5% 10%;
-    border: rgba(100, 85, 85, 0.8)
+    border: 1px solid rgba(100, 85, 85, 0.8);
+    font-size: 15px;
+    border-radius: 15px;
+    margin-right: 5px;
 }
 
 .listOfLists {
@@ -30,4 +33,6 @@
 
 .doAddBtn {
     border-radius: 40%;
+    padding-top: 12px;
+    padding-bottom: 14px;
 }

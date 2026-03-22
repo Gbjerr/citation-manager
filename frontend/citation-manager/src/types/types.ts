@@ -45,3 +45,6 @@ export const REFERENCE_STYLE_VALUES = [
 ] as const;
 
 export type ReferenceStyleType = (typeof REFERENCE_STYLE_VALUES)[number];
+
+// Separator for citation entity ID and formatted text in bibliographic entries.
+export const SEP: string = '\x1F'
