@@ -1,22 +1,8 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;
   text-align: center;
-}
-
-.logoutBtn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 0.75rem;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-}
-
-.logoutBtn:hover {
-    opacity: 0.85;
 }
 
 li {

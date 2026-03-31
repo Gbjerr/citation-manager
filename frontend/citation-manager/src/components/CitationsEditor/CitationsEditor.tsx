@@ -221,14 +221,16 @@ export const CitationsEditor = ({
                 >
                     Add citation
                 </button>
-                <div className='layoutOptions'>
+                <div className="layoutOptions">
                     <RefStyleCombo
                         onRefStyleSelect={onRefStyleSelect}
                         selectedRefStyle={selectedRefStyle}
                     />
                     <button
                         className="copyBtn"
-                        onClick={() => navigator.clipboard.writeText(bibliography)}
+                        onClick={() =>
+                            navigator.clipboard.writeText(bibliography)
+                        }
                     >
                         Copy to clipboard
                     </button>
@@ -247,19 +249,23 @@ export const CitationsEditor = ({
                 }}
             />
 
-            <ul className={'list-' + selectedCitationList.id}>
-                {bibliographyEntries.map(({ text, citation }) => {
-                    return (
-                        <li key={citation.id}>
-                            <CiteEntry
-                                citation={citation}
-                                text={text}
-                                doUpdateCitationData={doUpdateCitationData}
-                            />
-                        </li>
-                    );
-                })}
-            </ul>
+            {citations.length != 0 ? (
+                <ul className={'list-' + selectedCitationList.id}>
+                    {bibliographyEntries.map(({ text, citation }) => {
+                        return (
+                            <li key={citation.id}>
+                                <CiteEntry
+                                    citation={citation}
+                                    text={text}
+                                    doUpdateCitationData={doUpdateCitationData}
+                                />
+                            </li>
+                        );
+                    })}
+                </ul>
+            ) : (
+                <h2 className='noCitationsHeader'>No citations</h2>
+            )}
         </div>
     );
 };

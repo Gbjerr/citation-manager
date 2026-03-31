@@ -1,0 +1,75 @@
+nav {
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    width: calc(100% + 10rem);
+    margin: 20px -1.5rem;
+    padding: 0.75rem;
+    border: 1px transparent rgb(219, 245, 245);
+    border-radius: 15px;
+    background: #f2eff5;
+}
+
+@media (max-width: 1465px) {
+    nav {
+        width: 100%;
+        margin: 20px 0;
+    }
+}
+
+.navRight {
+    display: flex;
+}
+
+.rightBtns {
+    display: flex
+}
+
+.signInBtn {
+    background: #0a4dc9c7;
+    color: #f1f1f1;
+}
+
+.logInBtn {
+    background-color: #cecdcdee;
+}
+
+.rightBtns > button,
+.rightBtns > a {
+    margin-left: 6px;
+}
+
+.rightBtns > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logoutBtn {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+}
+
+.logoutBtn:hover {
+    opacity: 0.85;
+}
+
+.logo {
+    height: 90px;
+}
+
+.navLeft {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
