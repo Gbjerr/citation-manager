@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
+
 /**
  * Exposes endpoints related to authorization for login, registration and updating access
  * and refresh tokens.
@@ -45,19 +47,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthTokenWrapperDto> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
 
         String attributeExistsMsg = null;
-        if(userService.isUsernameAvailable(user.getUsername())) {
+        if(!userService.isUsernameAvailable(user.getUsername())) {
             attributeExistsMsg = "Username is already taken";
-        } else if(userService.isEmailAvailable(user.getEmail())) {
+        } else if(!userService.isEmailAvailable(user.getEmail())) {
             attributeExistsMsg = "Email is already registered";
-        } else if(userService.isPasswordAvailable(user.getPassword())) {
+        } else if(!userService.isPasswordAvailable(user.getPassword())) {
             attributeExistsMsg = "Password is already taken";
         }
 
         if(attributeExistsMsg != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, attributeExistsMsg);
+            return ResponseEntity.badRequest().body(Map.of("message", attributeExistsMsg));
         }
 
         userService.saveUser(user);

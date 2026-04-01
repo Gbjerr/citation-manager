@@ -56,16 +56,16 @@ public class UserService {
     }
 
     public boolean isUsernameAvailable(String username) {
-        return userRepository.findByUsername(username) != null;
+        return userRepository.findByUsername(username) == null;
     }
 
     public boolean isPasswordAvailable(String password) {
         String hashedPassword = SecurityConfig.getEncoder().encode(password);
-        return userRepository.findByPassword(hashedPassword) != null;
+        return userRepository.findByPassword(hashedPassword) == null;
     }
 
     public boolean isEmailAvailable(String mail) {
-        return userRepository.findByEmail(mail) != null;
+        return userRepository.findByEmail(mail) == null;
     }
 
     public void deleteAllUsers() {
