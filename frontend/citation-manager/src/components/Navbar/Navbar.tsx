@@ -1,4 +1,5 @@
 import type { TokenPair } from '../../types/types'
+import { Link } from 'react-router-dom'
 import './Navbar.css'
 
 type NavbarProps = {
@@ -7,6 +8,9 @@ type NavbarProps = {
     clear: () => void
 }
 
+/**
+ * The navigation bar component, used for easy access to log in, sign up, log out etc.
+ */
 export const Navbar = ({isAuthenticated, tokenPair, clear}: NavbarProps) => {
 
         const handleLogout = async (clear: () => void, tokenPair: TokenPair) => {
@@ -35,7 +39,7 @@ export const Navbar = ({isAuthenticated, tokenPair, clear}: NavbarProps) => {
     return (
         <nav>
             <div className="navLeft">
-                <a href="/"><img src='/logo/cm_logo.png' className='logo' /></a>
+                <Link to="/"><img src='/logo/cm_logo.png' className='logo' /></Link>
             </div>
             <div className="navRight">
                 {isAuthenticated ? (
@@ -47,8 +51,12 @@ export const Navbar = ({isAuthenticated, tokenPair, clear}: NavbarProps) => {
                     </button>
                 ) : (
                     <div className='rightBtns'>
-                        <button className="logInBtn" >Log in</button>
-                        <button className="signInBtn">Sign up</button>
+                            <Link to='/login'>
+                                <button className="logInBtn" >Log in</button>
+                            </Link>
+                            <Link to='/signup'>
+                                <button className="signInBtn">Sign up</button>
+                            </Link>
                     </div>
                 )}
             </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTokenPair from './hooks/useTokenPair'
 import Login from './components/Login/Login';
 import CitationLists from './components/CitationLists/CitationLists';
@@ -6,12 +6,23 @@ import type { CitationList } from './types/types.ts'
 import './App.css'
 import { CitationsEditor } from './components/CitationsEditor/CitationsEditor.tsx';
 import { Navbar } from './components/Navbar/Navbar.tsx';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import Signup from './Signup/Signup.tsx';
 
 
 const App = () => {
     const { tokenPair, setTokenPair, isAuthenticated, clear } = useTokenPair();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [selectedCitationList, setSelectedCitationList] =
         useState<CitationList | null>(null);
+
+    // Redirect to home page once registered or logged in.
+    useEffect(() => {
+        if (isAuthenticated && (location.pathname === '/login' || location.pathname === '/signup')) {
+            navigate('/', { replace: true });
+        }
+    }, [isAuthenticated, location.pathname, navigate]);
 
     // De-select the citation list on clear.
     const handleClear = () => {
@@ -51,7 +62,17 @@ const App = () => {
                     </main>
                 </div>
             ) : (
-                <Login setTokenPair={setTokenPair} clear={clear} />
+                    <Routes>
+                        <Route
+                            path="/login"
+                            element={<Login setTokenPair={setTokenPair} clear={clear} />}
+                        />
+                        <Route
+                            path="/signup"
+                            element={<Signup setTokenPair={setTokenPair} clear={clear} />}
+                        />
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </Routes>
             )}
         </div>
     );

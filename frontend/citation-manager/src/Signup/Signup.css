@@ -1,5 +1,5 @@
-.login-wrapper {
-    margin-top: 80px;
+.signup-wrapper {
+    margin-top: 50px;
     justify-self: center;
     align-items: center;
     width: 500px;
@@ -11,7 +11,7 @@
     background: linear-gradient(#e4dcdc5b, #9198e557);
 }
 
-.loginForm {
+.signupForm {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +23,7 @@ label > p {
     font-weight: 500;
 }
 
-.loginForm label > input {
+.signupForm label > input {
     padding: 0.75rem 0.5rem;
     border-radius: 10px;
     border: 1px solid rgba(37, 85, 37, 0.35);
@@ -35,14 +35,14 @@ label > p {
     margin-top: 20px;
 }
 
+.error {
+    color: red;
+    border: none;
+}
+
 .submit-wrapper > button {
     height: 50px;
     width: 200px;
     background-color: rgb(17, 24, 29);
-    color: rgb(252, 252, 252);
-}
-
-.error {
-    color: red;
-    border: none;
+    color: rgb(236, 236, 236);
 }
