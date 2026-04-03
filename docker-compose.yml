@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=citation_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d citation_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    container_name: db
+  backend:
+    image: citation-manager-backend:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8090:8090
+    environment:
+      - DEV_USERNAME=postgres
+      - DEV_PASSWORD=postgres
+      - DEV_DB_URL_DOCKER=jdbc:postgresql://db:5432/citation_db
+    restart: always
+  frontend:
+    build:
+      context: ./frontend/citation-manager
+      dockerfile: Dockerfile
+    image: citation-manager-frontend:latest
+    depends_on:
+      - backend
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8090
+    restart: always
+volumes:
+  data:
+    driver: local
