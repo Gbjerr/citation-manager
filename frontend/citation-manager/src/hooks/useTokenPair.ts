@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import type { TokenPair } from '../types/types.ts'
+import { API_BASE_URL } from '../utils/api.ts';
 const ACCESS_KEY = "accessToken";
 const REFRESH_KEY = "refreshToken";
 
@@ -35,7 +36,7 @@ export default function useTokenPair() {
     // Try rotating the refresh token.
     const tryRefreshToken = useCallback(async (refreshToken: string) => {
         try {
-            const res = await fetch("http://localhost:8090/api/auth/refresh", {
+            const res = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -12,6 +12,7 @@ import { CiteEntry } from '../CiteEntry/CiteEntry';
 import { formatCitations } from '../../utils/formatCitations';
 import './CitationsEditor.css';
 import { RefStyleCombo } from '../RefStyleCombo/RefStyleCombo';
+import { API_BASE_URL } from '../../utils/api.ts';
 
 const EMPTY_CITATION: Citation = {
     id: -1,
@@ -74,7 +75,7 @@ export const CitationsEditor = ({
         try {
             const res = await authorizedFetch(
                 tokenPair,
-                'http://localhost:8090/api/citations',
+                `${API_BASE_URL}/api/citations`,
                 'POST',
                 { setTokenPair, clear },
                 {
@@ -115,7 +116,7 @@ export const CitationsEditor = ({
             try {
                 const res = await authorizedFetch(
                     tokenPair,
-                    `http://localhost:8090/api/citations/by-citationlist/${selectedCitationList?.id}`,
+                    `${API_BASE_URL}/api/citations/by-citationlist/${selectedCitationList?.id}`,
                     'GET',
                     { setTokenPair, clear },
                 );
@@ -182,7 +183,7 @@ export const CitationsEditor = ({
     const doUpdateCitationData = async (citation: Citation) => {
         const res = await authorizedFetch(
             tokenPair,
-            `http://localhost:8090/api/citations/${citation.id}`,
+            `${API_BASE_URL}/api/citations/${citation.id}`,
             'PUT',
             { setTokenPair, clear },
             {

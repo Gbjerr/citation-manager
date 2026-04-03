@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { TokenPair, LoginProps, CitationList } from '../../types/types.ts';
 import authorizedFetch from '../../utils/authorizedFetch.ts';
 import './CitationLists.css';
+import { API_BASE_URL } from '../../utils/api.ts';
 
 interface CitationListsProps {
     tokenPair: TokenPair;
@@ -29,7 +30,7 @@ const CitationLists = ({
             try {
                 const response = await authorizedFetch(
                     tokenPair,
-                    'http://localhost:8090/api/citationlists/me',
+                    `${API_BASE_URL}/api/citationlists/me`,
                     'GET',
                     { setTokenPair, clear },
                 );
@@ -62,7 +63,7 @@ const CitationLists = ({
 
         const request = await authorizedFetch(
             tokenPair,
-            'http://localhost:8090/api/citationlists/me',
+            `${API_BASE_URL}/api/citationlists/me`,
             'POST',
             { setTokenPair, clear },
             { title: newCitationListName },

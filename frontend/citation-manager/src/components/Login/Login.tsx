@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import type { LoginProps } from '../../types/types.ts'
 import './Login.css';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../utils/api.ts';
 
 async function loginUser(credentials: { username: string; password: string; }) {
-    return fetch('http://localhost:8090/api/auth/login', {
+    return fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

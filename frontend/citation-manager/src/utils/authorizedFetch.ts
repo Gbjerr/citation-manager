@@ -1,4 +1,5 @@
 import type { TokenPair, LoginProps } from '../types/types.ts';
+import { API_BASE_URL } from './api.ts';
 
 let refreshPromise: Promise<TokenPair | null> | null = null;
 
@@ -11,7 +12,7 @@ const refreshTokenPair = async (tokenPair: TokenPair, { setTokenPair, clear }: L
 
     refreshPromise = (async () => {
         try {
-            const refreshRes = await fetch('http://localhost:8090/api/auth/refresh', {
+            const refreshRes = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

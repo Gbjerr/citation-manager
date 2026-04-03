@@ -2,9 +2,10 @@ import { useState } from 'react'
 import './Signup.css'
 import type { LoginProps } from '../types/types';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../utils/api.ts';
 
 async function signupUser(userCredentials: {username: string, email: string, password: string}) {
-    return await fetch('http://localhost:8090/api/auth/register', {
+    return await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

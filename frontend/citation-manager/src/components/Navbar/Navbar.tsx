@@ -1,6 +1,7 @@
 import type { TokenPair } from '../../types/types'
 import { Link } from 'react-router-dom'
 import './Navbar.css'
+import { API_BASE_URL } from '../../utils/api.ts';
 
 type NavbarProps = {
     isAuthenticated: boolean,
@@ -20,7 +21,7 @@ export const Navbar = ({isAuthenticated, tokenPair, clear}: NavbarProps) => {
                 headers["Authorization"] = `Bearer ${tokenPair.accessToken}`;
             }
 
-            const res = await fetch('http://localhost:8090/api/auth/logout', {
+            const res = await fetch(`${API_BASE_URL}/api/auth/logout`, {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify({
