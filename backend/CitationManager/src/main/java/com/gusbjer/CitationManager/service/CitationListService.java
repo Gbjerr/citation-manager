@@ -17,6 +17,9 @@ public class CitationListService {
     @Autowired
     private CitationListRepository citationListRepository;
 
+    @Autowired
+    private CitationService citationService;
+
     public CitationList getCitationListById(Long id) {
         return citationListRepository.findById(id).orElse(null);
     }
@@ -31,6 +34,7 @@ public class CitationListService {
         if(citationListOpt.isEmpty()) {
             return null;
         }
+        citationService.deleteCitationsByCitationListId(id);
         citationListRepository.deleteById(id);
         return citationListOpt.get();
     }

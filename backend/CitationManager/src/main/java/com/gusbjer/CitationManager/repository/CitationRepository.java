@@ -10,4 +10,7 @@ public interface CitationRepository extends JpaRepository<Citation, Long> {
     // Custom query to retrieve citation in order of their position.
     @Query("SELECT c FROM Citation c WHERE c.citationList.id = :citationListId ORDER BY c.position ASC")
     List<Citation> findByCitationListId(Long citationListId);
+
+    @Query("DELETE FROM Citation c WHERE c.citationList.id = :citationListId")
+    void deleteByCitationListId(Long citationListId);
 }

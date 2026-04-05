@@ -33,6 +33,10 @@ public class CitationService {
         return citationRepository.findByCitationListId(citationListId);
     }
 
+    public void deleteCitationsByCitationListId(Long citationListId) {
+        citationRepository.deleteByCitationListId(citationListId);
+    }
+
     public Citation deleteCitationById(Long id) {
         Optional<Citation> citationOpt = citationRepository.findById(id);
 
