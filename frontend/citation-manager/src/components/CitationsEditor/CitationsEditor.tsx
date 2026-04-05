@@ -23,7 +23,8 @@ const EMPTY_CITATION: Citation = {
     doi: '',
     url: '',
     isbn: '',
-    position: -1
+    position: -1,
+    citationListId: -1
 };
 
 type CitationEditorProps = {
@@ -213,6 +214,22 @@ export const CitationsEditor = ({
         setCitations(modifiedCitations);
     };
 
+    const doDeleteCitation = async (citation: Citation) => {
+        const res = await authorizedFetch(
+            tokenPair,
+            `${API_BASE_URL}/api/citations/${citation.id}`,
+            'DELETE',
+            { setTokenPair, clear }
+        );
+
+        if (!res?.ok) {
+            console.log(res?.status)
+            return;
+        }
+
+        setCitations(citations.filter(c => c.id !== citation.id));
+    };
+
     return (
         <div className="citations-editor">
             <div className="ce-buttonsLayout">
@@ -259,6 +276,7 @@ export const CitationsEditor = ({
                                     citation={citation}
                                     text={text}
                                     doUpdateCitationData={doUpdateCitationData}
+                                    doDeleteCitation={doDeleteCitation}
                                 />
                             </li>
                         );

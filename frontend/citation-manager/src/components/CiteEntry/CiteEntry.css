@@ -21,3 +21,19 @@ span {
     cursor: pointer;
     transition: border-color 0.25s;
 }
+.buttonsContainer {
+    display: flex;
+    gap: 5px;
+}
+
+.deleteButton {
+    padding: 0.3em 0.6em;
+    font-size: 1em;
+    font-weight: 250;
+    font-family: inherit;
+    height: 40px;
+    background-color: #f76a5b;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    transition: border-color 0.25s;
+}

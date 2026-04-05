@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './Signup.css'
-import type { LoginProps } from '../types/types';
+import type { LoginProps } from '../../types/types.ts';
 import { Link } from 'react-router-dom';
-import { API_BASE_URL } from '../utils/api.ts';
+import { API_BASE_URL } from '../../utils/api.ts';
 
 async function signupUser(userCredentials: {username: string, email: string, password: string}) {
     return await fetch(`${API_BASE_URL}/api/auth/register`, {

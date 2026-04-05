@@ -7,6 +7,7 @@ type CiteEntryProps = {
     citation: Citation;
     text: string;
     doUpdateCitationData: (citation: Citation) => void;
+    doDeleteCitation: (citation: Citation) => void;
 };
 
 /** Checks for equality in attributes of two citations. */
@@ -25,7 +26,7 @@ function citationEquals(a: Citation, b: Citation): boolean {
 /**
  * Represents a citation entry in a list.
  */
-export const CiteEntry = ({ citation, text, doUpdateCitationData }: CiteEntryProps) => {
+export const CiteEntry = ({ citation, text, doUpdateCitationData, doDeleteCitation }: CiteEntryProps) => {
     const [currentCitation, setCurrentCitation] = useState(citation);
     const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
 
@@ -57,11 +58,18 @@ export const CiteEntry = ({ citation, text, doUpdateCitationData }: CiteEntryPro
 
             <span>
                 <div className="citationText">{text}</div>
-                <button className="editButton" onClick={() => {
-                    openUpdateDialog();
-                }}>
-                    edit...
-                </button>
+                <div className='buttonsContainer'>
+                    <button className="editButton" onClick={() => {
+                        openUpdateDialog();
+                    }}>
+                        edit...
+                    </button>
+                    <button className="deleteButton" onClick={() => {
+                        doDeleteCitation(currentCitation);
+                    }}>
+                        ✕
+                    </button>
+                </div>
             </span>
         </div>
     );

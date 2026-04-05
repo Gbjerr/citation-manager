@@ -23,6 +23,7 @@ export interface Citation {
     url: string;
     isbn: string;
     position: number;
+    citationListId: number;
 }
 
 export interface CitationListSelectionProps {

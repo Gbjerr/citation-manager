@@ -7,7 +7,7 @@ import './App.css'
 import { CitationsEditor } from './components/CitationsEditor/CitationsEditor.tsx';
 import { Navbar } from './components/Navbar/Navbar.tsx';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import Signup from './Signup/Signup.tsx';
+import Signup from './components/Signup/Signup.tsx';
 
 
 const App = () => {
