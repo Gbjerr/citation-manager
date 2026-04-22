@@ -20,9 +20,9 @@
 }
 
 .createDialogPanel {
-  width: min(720px, 100%);
-  height: min(450px, 100%);
-  background: #fff;
+  width: max(50vw, 590px);
+  height: 90vh;
+  background: #ffffff;
   color: #111;
   border-radius: 10px;
   padding: 16px;
@@ -36,10 +36,13 @@
   justify-content: space-between;
   gap: 12px;
   position: relative;
-  }
+}
   
-  .submitBtn {
+.submitBtn {
     position: absolute;
+    background-color: rgb(84, 120, 219);
+    color: rgb(255, 255, 255);
+    border: 3px solid rgb(84, 120, 219);
     left: 80%;
     transform: translateY(-50%);
     top: 50%;

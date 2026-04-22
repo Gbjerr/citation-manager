@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
     SEP,
-    type Citation,
+    type UserCitation,
     type CitationList,
     type ReferenceStyleType,
     type TokenPair,
@@ -13,25 +13,14 @@ import { formatCitations } from '../../utils/formatCitations';
 import './CitationsEditor.css';
 import { RefStyleCombo } from '../RefStyleCombo/RefStyleCombo';
 import { API_BASE_URL } from '../../utils/api.ts';
-
-const EMPTY_CITATION: Citation = {
-    id: -1,
-    title: '',
-    authors: '',
-    publisher: '',
-    date: new Date(), // "YYYY-MM-DD"
-    doi: '',
-    url: '',
-    isbn: '',
-    position: -1,
-    citationListId: -1
-};
+import { FindSourcesCombo } from '../FindSourcesCombo/FindSourcesCombo.tsx';
+import { toDateInputValue } from '../../utils/dateUtil.ts';
 
 type CitationEditorProps = {
     tokenPair: TokenPair;
     setTokenPair: (pair: TokenPair) => void;
     clear: () => void;
-    selectedCitationList: CitationList;
+    selectedCitationList: CitationList | null;
 };
 
 /**
@@ -43,23 +32,21 @@ export const CitationsEditor = ({
     clear,
     selectedCitationList,
 }: CitationEditorProps) => {
-    const [citations, setCitations] = useState<Citation[]>([]);
+    const [citations, setCitations] = useState<UserCitation[]>([]);
     const [bibliography, setBibliography] = useState('');
-    const [bibliographyEntries, setBibliographyEntries] = useState<{ text: string, citation: Citation }[]>(
+    const [bibliographyEntries, setBibliographyEntries] = useState<{ text: string, citation: UserCitation }[]>(
         [],
     );
     const [selectedRefStyle, setSelectedRefStyle] =
         useState<ReferenceStyleType>('ieee');
 
     const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
-    const [newCitation, setNewCitation] = useState<Citation>(EMPTY_CITATION);
 
     const openCreateDialog = useCallback(() => {
         setCreateDialogOpen(true);
     }, []);
 
     const closeCreateDialog = useCallback(() => {
-        setNewCitation(EMPTY_CITATION);
         setCreateDialogOpen(false);
     }, []);
 
@@ -72,7 +59,13 @@ export const CitationsEditor = ({
         [],
     );
 
-    const doCreateCitation = async () => {
+    const onCreateCitationSubmit = async (citation: UserCitation) => {
+        await doCreateCitation(citation);
+        closeCreateDialog();
+    };
+
+    const doCreateCitation = async (citationToCreate: UserCitation) => {
+
         try {
             const res = await authorizedFetch(
                 tokenPair,
@@ -80,13 +73,13 @@ export const CitationsEditor = ({
                 'POST',
                 { setTokenPair, clear },
                 {
-                    title: newCitation.title,
-                    authors: newCitation.authors,
-                    publisher: newCitation.publisher,
-                    date: newCitation.date?.toISOString(),
-                    doi: newCitation.doi,
-                    url: newCitation.url,
-                    isbn: newCitation.isbn,
+                    title: citationToCreate.title,
+                    authors: citationToCreate.authors,
+                    publisher: citationToCreate.publisher,
+                    date: toDateInputValue(citationToCreate.date),
+                    doi: citationToCreate.doi,
+                    url: citationToCreate.url,
+                    isbn: citationToCreate.isbn,
                     position: citations.length === 0
                         ? '1'
                         : `${citations[citations.length - 1].position + 1}`,
@@ -101,7 +94,7 @@ export const CitationsEditor = ({
                 throw new Error(msg);
             }
 
-            const created: Citation = await res.json();
+            const created: UserCitation = await res.json();
             setCitations(prev => [...prev, created]);
         } catch (e) {
             console.error(e, 'Error while creating citation');
@@ -128,7 +121,7 @@ export const CitationsEditor = ({
 
                 const data = await res?.json();
 
-                const normalizeDateData = (c: Citation): Citation => {
+                const normalizeDateData = (c: UserCitation): UserCitation => {
                     const date = c.date instanceof Date
                         ? c.date
                         : new Date(c.date);
@@ -158,7 +151,7 @@ export const CitationsEditor = ({
         const runFormatting = async () => {
             const listOutputResult = await formatCitations(citations, selectedRefStyle);
 
-            const bibEntries: { text: string; citation: Citation }[] =
+            const bibEntries: { text: string; citation: UserCitation }[] =
                 listOutputResult.split('\n').map(entry => {
                     const entryParts = entry.split(SEP);
                     const entryId = entryParts[0];
@@ -181,7 +174,7 @@ export const CitationsEditor = ({
         runFormatting();
     }, [citations, selectedRefStyle]);
 
-    const doUpdateCitationData = async (citation: Citation) => {
+    const doUpdateCitationData = async (citation: UserCitation) => {
         const res = await authorizedFetch(
             tokenPair,
             `${API_BASE_URL}/api/citations/${citation.id}`,
@@ -214,7 +207,7 @@ export const CitationsEditor = ({
         setCitations(modifiedCitations);
     };
 
-    const doDeleteCitation = async (citation: Citation) => {
+    const doDeleteCitation = async (citation: UserCitation) => {
         const res = await authorizedFetch(
             tokenPair,
             `${API_BASE_URL}/api/citations/${citation.id}`,
@@ -234,6 +227,7 @@ export const CitationsEditor = ({
         <div className="citations-editor">
             <div className="ce-buttonsLayout">
                 <button
+                    disabled={ selectedCitationList === null }
                     className="createCitationBtn"
                     onClick={openCreateDialog}
                 >
@@ -245,6 +239,7 @@ export const CitationsEditor = ({
                         selectedRefStyle={selectedRefStyle}
                     />
                     <button
+                        disabled={ selectedCitationList === null }
                         className="copyBtn"
                         onClick={() =>
                             navigator.clipboard.writeText(bibliography)
@@ -252,6 +247,10 @@ export const CitationsEditor = ({
                     >
                         Copy to clipboard
                     </button>
+                    <FindSourcesCombo 
+                        doCreateCitation={doCreateCitation}
+                        selectedCitationList={selectedCitationList}
+                    />
                 </div>
             </div>
 
@@ -259,15 +258,10 @@ export const CitationsEditor = ({
                 open={isCreateDialogOpen}
                 onClose={closeCreateDialog}
                 selectedCitationListTitle={selectedCitationList?.title}
-                newCitation={newCitation}
-                setNewCitation={setNewCitation}
-                onSubmit={() => {
-                    void doCreateCitation();
-                    closeCreateDialog();
-                }}
+                onSubmit={onCreateCitationSubmit}
             />
 
-            {citations.length != 0 ? (
+            {citations.length != 0 && selectedCitationList ? (
                 <ul className={'list-' + selectedCitationList.id}>
                     {bibliographyEntries.map(({ text, citation }) => {
                         return (

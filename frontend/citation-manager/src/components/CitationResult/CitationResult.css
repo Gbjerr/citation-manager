@@ -1,0 +1,22 @@
+.citationResultContatainer {
+  padding: 10px;
+  margin-top: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 5%;
+}
+
+.citationResultContatainer:hover {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addButton {
+  margin-top: 10px;
+  align-self: flex-end;
+  width: fit-content;
+  text-align: center;
+  background-color: rgb(84, 120, 219);
+  color: rgb(255, 255, 255);
+  border: 2px solid rgb(84, 120, 219);
+}

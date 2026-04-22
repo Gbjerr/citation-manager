@@ -1,15 +1,14 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { memo } from 'react';
-import type { Citation } from '../../types/types';
+import { memo, useState } from 'react';
+import { EMPTY_CITATION, type UserCitation } from '../../types/types';
 import './CitationDialog.css';
+import { toDateInputValue } from '../../utils/dateUtil';
 
 type CitationDialogProps = {
     open: boolean;
     onClose: () => void;
     selectedCitationListTitle?: string;
-    newCitation: Citation;
-    setNewCitation: (citation: Citation) => void;
-    onSubmit: () => void;
+    onSubmit: (citation: UserCitation) => void;
 };
 
 /**
@@ -19,10 +18,10 @@ export const CitationDialog = memo(function CitationDialog({
     open,
     onClose,
     selectedCitationListTitle,
-    newCitation,
-    setNewCitation,
     onSubmit,
 }: CitationDialogProps) {
+    const [newCitation, setNewCitation] = useState<UserCitation>(EMPTY_CITATION);
+
     return (
         <Dialog open={open} onClose={onClose} className="createDialogRoot">
             <div className="createDialogContainer">
@@ -33,12 +32,21 @@ export const CitationDialog = memo(function CitationDialog({
                                 ? `Add citation to: ${selectedCitationListTitle}`
                                 : 'Edit'}
                         </DialogTitle>
-                        <button className='submitBtn' type="button" onClick={onSubmit}>
-                            Submit
+                        <button 
+                            className='submitBtn' 
+                            type="button" 
+                            onClick={() => {
+                                onSubmit(newCitation);
+                                setNewCitation(EMPTY_CITATION);
+                            }}>
+                                Submit
                         </button>
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={() => {
+                                setNewCitation(EMPTY_CITATION);
+                                onClose();
+                            }}
                             className="createDialogClose"
                         >
                             ✕
@@ -151,10 +159,3 @@ export const CitationDialog = memo(function CitationDialog({
         </Dialog>
     );
 });
-
-function toDateInputValue(date: Date | string): string {
-    if (!date) return '';
-    const d = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(d.getTime())) return '';
-    return d.toISOString().split('T')[0];
-}

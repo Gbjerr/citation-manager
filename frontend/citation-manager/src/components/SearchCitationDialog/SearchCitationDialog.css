@@ -1,0 +1,75 @@
+.searchCitationDialogRoot {
+    position: relative;
+    z-index: 9999;
+}
+
+.searchCitationDialogContainer {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.searchCitationDialogHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+}
+
+.searchCitationDialogPanel {
+    width: max(50vw, 590px);
+    height: 90vh;
+    background: #ffffff;
+    color: #111;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    overflow: auto;
+}
+
+.searchCitationDialogTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.searchCitationDialogClose {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.searchCitationDialogBody {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 90%;
+  height: auto;
+  text-align: center;
+}
+
+.descriptionSearchBtn {
+  margin-top: 10px;    ;
+  align-self: flex-end;
+  width: 100px;
+  text-align: center;
+  background-color: #eaeaeab5;
+  color: rgb(16, 16, 169);
+  border: 2px solid rgb(16, 16, 169);
+}
+
+.searchCitationDialogBody > textarea {
+  text-align: left;
+  width: 100%;
+  flex: 0 0 150px;
+  font-size: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  resize: none;
+}

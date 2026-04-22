@@ -49,16 +49,12 @@ const App = () => {
                         />
                     </aside>
                     <main className="main-content">
-                        {selectedCitationList == null ? (
-                            <h2>Select a citation list.</h2>
-                        ) : (
-                            <CitationsEditor
-                                tokenPair={tokenPair}
-                                setTokenPair={setTokenPair}
-                                clear={handleClear}
-                                selectedCitationList={selectedCitationList}
-                            />
-                        )}
+                        <CitationsEditor
+                            tokenPair={tokenPair}
+                            setTokenPair={setTokenPair}
+                            clear={handleClear}
+                            selectedCitationList={selectedCitationList}
+                        />
                     </main>
                 </div>
             ) : (

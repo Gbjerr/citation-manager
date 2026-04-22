@@ -13,7 +13,7 @@ export interface CitationList {
     title: string;
 }
 
-export interface Citation {
+interface Citation {
     id: number;
     title: string;
     authors: string;
@@ -21,9 +21,16 @@ export interface Citation {
     date: Date;
     doi: string;
     url: string;
+}
+
+export interface UserCitation extends Citation {
     isbn: string;
     position: number;
     citationListId: number;
+}
+
+export interface SemanticCitation extends Citation {
+    abstractText: string;
 }
 
 export interface CitationListSelectionProps {
@@ -50,3 +57,16 @@ export type ReferenceStyleType = (typeof REFERENCE_STYLE_VALUES)[number];
 
 // Separator for citation entity ID and formatted text in bibliographic entries.
 export const SEP: string = '\x1F'
+
+export const EMPTY_CITATION: UserCitation = {
+    id: -1,
+    title: '',
+    authors: '',
+    publisher: '',
+    date: new Date(), // "YYYY-MM-DD"
+    doi: '',
+    url: '',
+    isbn: '',
+    position: -1,
+    citationListId: -1
+};

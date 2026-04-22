@@ -1,0 +1,60 @@
+.findSourcesCombo {
+    position: relative;
+    display: inline-block;
+}
+
+.findSourcesOptions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 200px;
+    color: rgb(0, 0, 0);
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    z-index: 50;
+    background-color: #ffffff;
+}
+
+.searchByDescriptionContent,
+.recommendSourcesContent {
+    height: 30px;
+    width: 200px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    color: rgb(0, 0, 177);
+    border-radius: 5%;
+    border: 2px solid  rgba(39, 39, 216, 0);
+    transition: background-color 0.2s ease-in;
+}
+
+.searchByDescriptionContent:hover,
+.recommendSourcesContent:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.downIcon {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+}
+
+.findSourcesTextBtnContent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.findSourcesComboButton {
+    height: 40px;
+    color: white;
+    background: rgb(84, 120, 219);
+}
+
+.findSourcesComboButton--disabled {
+    background: rgba(84, 120, 219, 0.7);
+}
