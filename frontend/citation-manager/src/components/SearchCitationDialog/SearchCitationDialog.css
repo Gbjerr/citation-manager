@@ -73,3 +73,16 @@
   border-radius: 10px;
   resize: none;
 }
+
+.loadButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.dotSpinnerWrapper > div {
+  position: relative;
+  top: 60%;
+  transform: translateY(-60%);
+}

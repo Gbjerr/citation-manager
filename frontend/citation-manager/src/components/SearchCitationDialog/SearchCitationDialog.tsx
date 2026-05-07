@@ -4,10 +4,15 @@ import './SearchCitationDialog.css';
 import { useState } from 'react';
 import { API_BASE_URL } from '../../utils/api';
 import { CitationResult } from '../CitationResult/CitationResult';
+import { DotSpinner } from 'ldrs/react'
+import 'ldrs/react/DotSpinner.css';
 
 /**
  * Dialog for doing semantic search for citation by description.
  */
+const MIN_HELIX_MS = 600;
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 type SearchCitationDialogProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -22,27 +27,41 @@ export const SearchCitationDialog = ({
     const [similarCitations, setSimilarCitations] = useState<
         SemanticCitation[]
     >([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const onSearch = async () => {
-        const res = await fetch(
-            `${API_BASE_URL}/api/semanticcitations/similarity`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        if (isLoading) return;
+
+        const startedAt = Date.now();
+        setIsLoading(true);
+
+        try {
+            const res = await fetch(
+                `${API_BASE_URL}/api/semanticcitations/similarity`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ input: searchText }),
                 },
-                body: JSON.stringify({ input: searchText }),
-            },
-        );
+            );
 
-        if (!res.ok) {
-            console.error(res);
-            return;
-        }
+            if (!res.ok) {
+                console.error(res);
+                return;
+            }
 
-        res.json().then((data: SemanticCitation[]) => {
+            const data: SemanticCitation[] = await res.json();
             setSimilarCitations(data);
-        });
+        } catch(e) {
+            console.error(e);
+        } finally {
+            const elapsed = Date.now() - startedAt;
+            const remaining = Math.max(0, MIN_HELIX_MS - elapsed);
+            if (remaining > 0) await sleep(remaining);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -76,13 +95,25 @@ export const SearchCitationDialog = ({
                             placeholder="Search by description"
                             onChange={e => setSearchText(e.target.value)}
                         />
-                        <button
-                            className="descriptionSearchBtn"
-                            type="button"
-                            onClick={onSearch}
-                        >
-                            Search
-                        </button>
+
+                        <div className='loadButtonWrapper'>
+                            {isLoading &&
+                                <div className='dotSpinnerWrapper'>
+                                    <DotSpinner
+                                        size="34"
+                                        speed="0.9" 
+                                        color="black" 
+                                    />
+                                </div>
+                            }
+                            <button
+                                className="descriptionSearchBtn"
+                                type="button"
+                                onClick={onSearch}
+                            >
+                                Search
+                            </button>
+                        </div>
 
                         <div className="similarCitationsContainer">
                             {similarCitations.map(citation => (
