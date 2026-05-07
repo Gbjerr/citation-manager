@@ -24,7 +24,7 @@ public class SemanticCitationController {
 
     @PostMapping("/similarity")
     public ResponseEntity<List<SemanticCitation>> getSimilarCitations(@RequestBody SimilarityRequestDto request) {
-        List<SemanticCitation> similarCitations = semanticCitationService.getSemanticSimilarCitations(request.getInput());
+        List<SemanticCitation> similarCitations = semanticCitationService.getSimilarCitations(request.getInput());
 
         return ResponseEntity.ok(similarCitations);
     }
