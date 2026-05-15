@@ -16,9 +16,9 @@ This project uses <code>pgvector</code> and <code>HNSW</code> index for semantic
 The dataset is consumed by the data loader project in <code>data_loader/CitationDataLoader</code>, which builds and imports citation records into the PostgreSQL database.
 
 ## Screenshots
-<img width="1917" height="997" alt="Skärmbild 2026-05-10 130650" src="https://github.com/user-attachments/assets/b1433c11-1e86-46dd-9dcd-c327badefcf6" />
+<img width="1918" height="997" alt="Image" src="https://github.com/user-attachments/assets/91a128d1-7745-459d-bb5d-8d1cd60e100a" />
 <br>
-<img width="1917" height="1017" alt="Skärmbild 2026-05-10 131009" src="https://github.com/user-attachments/assets/e68d7162-a8f6-4326-a430-22d8720b0833" />
+<img width="1917" height="1017" alt="Image" src="https://github.com/user-attachments/assets/1c466007-7931-4802-998c-54f29fc68168" />
 
 ## Tech stack
 
