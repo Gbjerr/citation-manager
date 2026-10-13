@@ -1,13 +1,7 @@
 package com.gusbjer.CitationManager.model;
 import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,4 +33,8 @@ public class Citation {
     @ManyToOne
     @JoinColumn(name = "citation_list_id", referencedColumnName = "id")
     private CitationList citationList;
+
+    @OneToOne
+    @JoinColumn(name = "source_document_id", referencedColumnName = "id")
+    private SourceDocument sourceDocument;
 }
