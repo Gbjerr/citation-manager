@@ -55,7 +55,8 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 "/api/auth/refresh",
-                                "/api/semanticcitations/similarity")
+                                "/api/semanticcitations/similarity",
+                                "/api/sourcedocuments/ingest")
                         .permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
