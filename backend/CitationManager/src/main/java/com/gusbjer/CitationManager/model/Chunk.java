@@ -39,5 +39,5 @@ public class Chunk {
 
     // pgvector literal, e.g. "[0.1, 0.2, ...]"
     @Column(name = "embedding", columnDefinition = "vector(768)")
-    private String embedding;
+    private float[] embedding;
 }
