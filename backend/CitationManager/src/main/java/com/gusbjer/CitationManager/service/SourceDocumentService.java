@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -50,15 +51,14 @@ public class SourceDocumentService {
     @Autowired
     private OllamaEmbeddingModel embeddingModel;
 
-    public List<Chunk> ingestSourceDocument(String filePath, Citation citation) {
-        File file = new File(filePath);
-        if(!file.exists()) {
-            throw new RuntimeException("File does not exist");
+    public List<Chunk> ingestSourceDocument(MultipartFile file, Citation citation) {
+        if(file.isEmpty()) {
+            throw new RuntimeException("File is empty");
         }
 
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("input", new FileSystemResource(file));
+        body.add("input", file.getResource());
         for(String teiCoordinate : TEI_COORDINATES_VALUES) {
             body.add(TEI_COORDINATES_PARAM, teiCoordinate);
         }
@@ -77,7 +77,7 @@ public class SourceDocumentService {
 
             if(response.getBody() != null) {
                 String grobidResponse = response.getBody();
-                List<Chunk> chunks = parseGrobidResponse(grobidResponse, filePath, citation);
+                List<Chunk> chunks = parseGrobidResponse(grobidResponse, file, citation);
                 SourceDocument sourceDocument = chunks.isEmpty() ? null : chunks.get(0).getSourceDocument();
 
                 if(sourceDocument != null) {
@@ -94,7 +94,7 @@ public class SourceDocumentService {
         return Collections.emptyList();
     }
 
-    private List<Chunk> parseGrobidResponse(String grobidResponse, String filePath, Citation citation) {
+    private List<Chunk> parseGrobidResponse(String grobidResponse, MultipartFile file, Citation citation) {
 
         List<Chunk> chunks = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class SourceDocumentService {
             Document doc = builder.parse(new ByteArrayInputStream(grobidResponse.getBytes()));
 
             SourceDocument sourceDocument = SourceDocument.builder()
-                    .location(filePath)
+                    .location(file.getOriginalFilename())
                     .citation(citation)
                     .build();
 

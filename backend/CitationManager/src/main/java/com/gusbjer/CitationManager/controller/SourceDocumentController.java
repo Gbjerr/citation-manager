@@ -7,10 +7,8 @@ import com.gusbjer.CitationManager.service.CitationService;
 import com.gusbjer.CitationManager.service.SourceDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,12 +23,12 @@ public class SourceDocumentController {
     private CitationService citationService;
 
     @PostMapping("/ingest")
-    public ResponseEntity<List<Chunk>> ingestSourceDocument(@RequestBody DocumentIngestRequestDto requestDto) {
-        Citation citation = citationService.getCitationById(requestDto.getCitationId());
+    public ResponseEntity<List<Chunk>> ingestSourceDocument(@RequestParam MultipartFile file, @RequestParam String documentTitle, @RequestParam long citationId) {
+        Citation citation = citationService.getCitationById(citationId);
         if(citation == null) {
-            throw new IllegalArgumentException("Citation with ID " + requestDto.getCitationId() + " not found.");
+            throw new IllegalArgumentException("Citation with ID " + citationId + " not found.");
         }
 
-        return ResponseEntity.ok(sourceDocumentService.ingestSourceDocument(requestDto.getFilePath(), citation));
+        return ResponseEntity.ok(sourceDocumentService.ingestSourceDocument(file, citation));
     }
 }
