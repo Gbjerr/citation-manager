@@ -6,6 +6,7 @@ import com.gusbjer.CitationManager.model.SourceDocument;
 import com.gusbjer.CitationManager.repository.SourceDocumentRepository;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,13 +20,15 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
 import java.io.*;
 import java.util.*;
 
 @Service
 public class SourceDocumentService {
-    private static final String GROBID_PROCESS_ENDPOINT = "http://localhost:8070/api/processFulltextDocument";
+    private static final String GROBID_PROCESS_PATH = "/api/processFulltextDocument";
+
+    @Value("${grobid.base-url}")
+    private String grobidBaseUrl;
 
     private static final String TEI_COORDINATES_PARAM = "teiCoordinates";
     private static final String[] TEI_COORDINATES_VALUES = {"p", "figure", "title", "table"};
@@ -65,7 +68,7 @@ public class SourceDocumentService {
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                GROBID_PROCESS_ENDPOINT,
+                grobidBaseUrl + GROBID_PROCESS_PATH,
                 request,
                 String.class
         );
@@ -127,6 +130,7 @@ public class SourceDocumentService {
                             .text(chunkData.text)
                             .page(chunkData.page > 0 ? chunkData.page : null)
                             .embedding(vectorEmbedding)
+                            .chunkIndex(chunks.size())
                             .sourceDocument(sourceDocument)
                             .build();
 
@@ -174,13 +178,20 @@ public class SourceDocumentService {
             sectionTitle = headElement.getTextContent();
         }
 
+        // Strip a trailing '.' (e.g. "1.2." -> "1.2") before computing the parent path
+        if(sectionIdentifier != null && sectionIdentifier.endsWith(".")) {
+            sectionIdentifier = sectionIdentifier.substring(0, sectionIdentifier.length() - 1);
+        }
+
         NodeList paragraphNodes = chunkNode.getElementsByTagName(PARAGRAPH_TAG);
 
         String sectionText = extractSectionText(paragraphNodes);
         int pageNumber = extractPageNumber(paragraphNodes);
         String sectionPath = extractSectionPath(sectionIdentifier, sectionTitle, sectionIdentifiers);
 
-        sectionIdentifiers.put(sectionIdentifier, sectionPath);
+        if(sectionIdentifier != null && !sectionIdentifier.isBlank()) {
+            sectionIdentifiers.put(sectionIdentifier, sectionPath);
+        }
 
         return sectionText.isEmpty()
                 ? null

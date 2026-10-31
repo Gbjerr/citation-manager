@@ -1,4 +1,22 @@
 services:
+  grobid:
+    image: grobid/grobid:0.9.1-full
+    init: true
+    ulimits:
+      core:
+        soft: 0
+        hard: 0
+    ports:
+      - "8070:8070"
+    container_name: grobid
+    environment:
+      CUDA_VISIBLE_DEVICES: "-1"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "http://localhost:8070/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
   ollama:
     image: ollama/ollama:latest
     ports:
@@ -44,13 +62,18 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+      grobid:
+        condition: service_healthy
     ports:
       - 8090:8090
+    volumes:
+      - C:/Users/gurra/Downloads:/host-downloads:ro
     environment:
       - DEV_USERNAME=postgres
       - DEV_PASSWORD=postgres
       - DEV_DB_URL_DOCKER=jdbc:postgresql://db:5432/citation_db
       - OLLAMA_URL_DOCKER=http://ollama:11434
+      - GROBID_URL_DOCKER=http://grobid:8070
     restart: always
   frontend:
     build:
